@@ -73,11 +73,54 @@ int main(){
             }
             break;
         case 3:
-        default:
+            calcularLucroTotal();
             break;
+        case 0:
+            cout << "Saindo do Sistema..." << endl;
+            break;
+        default:
+            cout << "Opcao invalida!" << endl;
         }
     }while(opcao != 0);
 
+    return 0;
+
+}
+
+int cadastrarFilmes(Filme filme[], int tamanho){
+    int i;
+    char continuar;
+
+    cout << endl << " --- Cadastro de Filmes --- " << endl;
+
+    for (i = 0; i < tamanho; i++){
+        cout << endl << "Sala " << (i + 1) << endl;
+        cout << "Titulo do Filme: ";
+        cin.getline(filme[i].titulo, 50);
+
+        cout << "Classificacao do filme: ";
+        cin >> filme[i].classificacao_filme;
+
+        cout << "Quantidade de ingressos disponiveis: ";
+        cin >> filme[i].ingressos_filme;
+
+        cout << "Preco do ingresso: R$ ";
+        cin >> filme[i].preco_filme;
+        cin.ignore();
+
+        if(i < tamanho - 1){
+            cout << "Deseja cadastrar a proxima sala? (S/N): ";
+            cin >> continuar;
+            cin.ignore();
+            if (continuar == 'n' || continuar == 'N'){
+                i++;
+                break;
+            }
+        }
+    }
+    cout << endl << "Cadastro finalizado! Total de filmes registrados: " << i << endl;
+
+    return i;
 }
 
 
