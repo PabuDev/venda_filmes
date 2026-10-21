@@ -29,6 +29,54 @@ int main(){
     int filmes_cadastrado = 0;
     int opcao;
 
+    cout.setf(ios::fixed, ios::floatfield);
+    cout.precision(2);
+
+    do{
+        cout << "\n --- MENU MULTICE UCS ---\n";
+        cout << "1 - Cadastrar filmes. (até " << qtd_sala << " )" << endl;
+        cout << "2 - Vender ingressos." << endl;
+        cout << "3 - Ver Lucro Total do Cinema." << endl;
+        cout << "4 - Sair" << endl;
+        cin >> opcao;
+        cin.ignore();
+        switch (opcao)
+        {
+        case 1:
+            filmes_cadastrado = cadastrarFilme(cinema, qtd_sala);
+            break;
+        case 2:
+            if(filmes_cadastrado == 0){
+                cout << endl << "[AVISO]: Nenhum filme cadastrado no momento!" << endl;
+            }
+            break;
+            char titulo_busca[50];
+            int qtd_desejada;
+            float valor_final = 0.0;
+
+            cout << endl << "--- Venda de Ingressos --- " << endl;
+            cout << "------ UCS ------" << endl;
+            exibirTabelaFilmes(cinema, filmes_cadastrado);
+
+            cout << endl << "Digite o titulo do filme: ";
+            cin.getline(titulo_busca, 50);
+
+            cout << "Quantidade de ingressos: ";
+            cin >> qtd_desejada;
+            cin.ignore();
+
+            if (venderIngressos(cinema, filmes_cadastrado, titulo_busca, qtd_desejada, valor_final)){
+                cout << "Venda realizada com sucesso! Valor total: R$ " << valor_final << endl;
+                salvarVenda(titulo_busca, valor_final);
+            } else {
+                cout << "Falha na venda!" << endl << "Verifique o titulo, estoque ou quantidade digitada." << endl;
+            }
+            break;
+        case 3:
+        default:
+            break;
+        }
+    }while(opcao != 0);
 
 }
 
