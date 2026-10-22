@@ -123,6 +123,78 @@ int cadastrarFilmes(Filme filme[], int tamanho){
     return i;
 }
 
+void exibirTabelaFilmes(const Filme filmes[], int cadastrados){
+    cout << " ----------------------------------------------------- ";
+
+    cout.setf(ios::left, ios::adjustfield);
+
+    cout.width(6); cout << "Sala";
+    cout.width(40); cout << "Titulo";
+    cout.width(15); cout << "Classificacao";
+    cout.width(24); cout << "Disponivel";
+    cout << "Preco" << endl;
+
+    cout << " ----------------------------------------------------- " << endl;;
+
+    for (int i = 0; i < cadastrados; i++){
+        cout.width(6); cout << (i + 1);
+        cout.width(40); cout << filmes[i].titulo;
+        cout.width(15); cout << filmes[i].classificacao_filme;
+        cout.width(24); cout << filmes[i].ingressos_filme;
+        cout << "R$ " << filmes[i].preco_filme;
+    }
+
+    cout << " ----------------------------------------------------- " << endl;
+}
+
+bool venderIngressos(Filme filmes[], int tamanho, const char* titulo, int qtd, float& valor_total){
+    if(qtd <= 0){
+        valor_total = 0.0;
+        return false;
+    }
+    for (int i = 0; i < tamanho; i++){
+        if (strcmp(filmes[i].titulo, titulo) == 0){
+            if(filmes[i].ingressos_filme >= qtd){
+                filmes[i].ingressos_filme -= qtd;
+                float total = qtd * filmes[i].preco_filme;
+                if(qtd >= 4){
+                    total *= 0.09f;
+                }
+                valor_total = total;
+                return true;
+            } else {
+                cout << "[ERRO] : Ingressos insuficientes. Dinsponiveis: " << filmes[i].ingressos_filme << endl;
+                valor_total = 0.0;
+                return false;
+            }
+        }
+    }
+    cout << "[ERRO] : Filme nao encontrado." << endl;
+    valor_total = 0.0;
+    return false;
+}
+
+void salvarVenda(const char* titulo, float valor){
+    ofstream arquivo("historico_vendas.bin", ios::app | ios::binary);
+    if(!arquivo){
+        cout << endl << "Nenhuma venda realizada ate o momento (Arquivo inexistente)" << endl;
+        return;
+    }
+    RegistroVendasFilme registro;
+    float lucro_acumulado = 0.0;
+    while (arquivo.read(reinterpret_cast<char*>(&registro), sizeof(RegistroVendasFilme)))
+    {
+        lucro_acumulado += registro.valor_venda_filme;
+    }
+    arquivo.close();
+    cout << endl << " ----------------------------------------------- " << endl;
+    cout << "Valor Total das Vendas: R$: " << lucro_acumulado << endl;
+    cout << endl << " ----------------------------------------------- " << endl;
+}
+
+
+
+
 
 
 
